@@ -32,10 +32,13 @@ app.post('/', async (req, res) => {
 
   console.log('[🚀 RECEIVED]', req.body);
 
-  // ✅ Kiểm tra input
-  if (!uidFrom || !threadId || !content || typeof content !== 'string') {
+  // ✅ Kiểm tra dữ liệu đầu vào
+  if (!uidFrom || !threadId || typeof content !== 'string' || content.trim() === '') {
     console.warn('[⚠️ BỎ QUA] Dữ liệu không hợp lệ:', { uidFrom, threadId, content });
-    return res.status(400).json({ success: false, message: 'Thiếu uidFrom, threadId hoặc content không hợp lệ' });
+    return res.status(400).json({
+      success: false,
+      message: 'Thiếu uidFrom, threadId hoặc content không hợp lệ'
+    });
   }
 
   try {
@@ -76,5 +79,5 @@ app.post('/', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Zalo Redis wrapper running on port ${port}`);
+  console.log(`🚀 Zalo Redis wrapper running on port ${port}`);
 });
