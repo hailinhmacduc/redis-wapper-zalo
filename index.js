@@ -28,13 +28,13 @@ const DEBOUNCE_MS = 10000;
 const debounceMap = new Map(); // threadId -> timeout
 
 app.post('/', async (req, res) => {
-  const { uidFrom, threadId, content } = req.body;
+  const { uidFrom, threadId, content, dName } = req.body;
 
   console.log('[🚀 RECEIVED]', req.body);
 
   // ✅ Kiểm tra dữ liệu đầu vào
   if (!uidFrom || !threadId || typeof content !== 'string' || content.trim() === '') {
-    console.warn('[⚠️ BỎ QUA] Dữ liệu không hợp lệ:', { uidFrom, threadId, content });
+    console.warn('[⚠️ BỎ QUA] Dữ liệu không hợp lệ:', { uidFrom, threadId, content, dName });
     return res.status(400).json({
       success: false,
       message: 'Thiếu uidFrom, threadId hoặc content không hợp lệ'
@@ -60,6 +60,7 @@ app.post('/', async (req, res) => {
         const response = await axios.post(process.env.WEBHOOK_URL, {
           uidFrom,
           threadId,
+          dName,               // ✅ Gửi thêm dName về webhook
           messages: allMessages
         });
         console.log('[✅ WEBHOOK GỬI]', response.data);
